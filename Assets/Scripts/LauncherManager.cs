@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.RemoteConfig;
 using System.Diagnostics;
+using UnityEngine.UI;
 
 public enum GameUpdate
 {
@@ -215,6 +216,48 @@ public struct Version
             return false;
         }
     }
+
+    Version VersionCodeToVersion(string versionCode)
+    {
+        Version version = new Version();
+
+        int start;
+        if (versionCode.Substring(0, 3) == "Dev")
+        {
+            version.versionType = VersionType.Dev;
+            start = 3;
+        }
+        else if (versionCode.Substring(0, 5) == "Alpha")
+        {
+            version.versionType = VersionType.Alpha;
+            start = 5;
+        }
+        else if (versionCode.Substring(0, 4) == "Beta")
+        {
+            version.versionType = VersionType.Beta;
+            start = 4;
+        }
+        else if (versionCode.Substring(0, 7) == "Release")
+        {
+            version.versionType = VersionType.Release;
+            start = 7;
+        }
+        else if (versionCode.Substring(0, 11) == "Pre-release")
+        {
+            version.versionType = VersionType.PreRelease;
+            start = 11;
+        }
+        else
+        {
+            return version;
+        }
+
+        version.major = versionCode[start + 1];
+        version.minor = versionCode[start + 3];
+        version.patch = versionCode[start + 5];
+
+        return version;
+    }
 }
 
 public class LauncherManager : MonoBehaviour
@@ -226,13 +269,19 @@ public class LauncherManager : MonoBehaviour
     public int patch;
     public bool isTestVersion;
 
+    [Header("UI")]
+    public Dropdown versionSelect;
+
     public struct userAttributes { }
     public struct appAttributes { }
 
     void Awake()
     {
         ConfigManager.FetchConfigs<userAttributes, appAttributes>(new userAttributes(), new appAttributes());
+    }
 
+    void Start()
+    {
         Version version = new Version(versionType, major, minor, patch, isTestVersion);
 
         switch (CheckVersion(version))
@@ -246,6 +295,19 @@ public class LauncherManager : MonoBehaviour
                 AskForUpdate(GetNewVersion());
                 break;
         }
+    }
+
+    private void SetFunction_UI()
+    {
+        versionSelect.onValueChanged.AddListener(delegate
+        {
+            Function_Dropdown(versionSelect);
+        });
+    }
+
+    private void Function_Dropdown(Dropdown select)
+    {
+        //select.options[select.value].text
     }
 
     GameUpdate CheckVersion(Version version)

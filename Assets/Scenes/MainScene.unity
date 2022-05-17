@@ -940,6 +940,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed0b0d37feca0af44b3a548c570f33dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  versionType: 0
+  major: 0
+  minor: 0
+  patch: 1
+  isTestVersion: 1
+  versionSelect: {fileID: 361225398}
 --- !u!4 &931827373
 Transform:
   m_ObjectHideFlags: 0
@@ -1167,10 +1173,6 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Text: {fileID: 207745979}
-  m_Image: {fileID: 0}
-  m_RectTransform: {fileID: 1018785595}
-  m_Toggle: {fileID: 1018785597}
 --- !u!114 &1018785597
 MonoBehaviour:
   m_ObjectHideFlags: 0
